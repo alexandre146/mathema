@@ -57,14 +57,14 @@ class Atividade(models.Model):
         atss = AtividadeSuporte.objects.filter(atividade_id = self.id).order_by('ordem')
         suportes = []
         for ats in atss:
-            suportes. extend(list(Suporte.objects.filter(id=ats.suporte_id)))
+            suportes.extend(list(Suporte.objects.filter(id=ats.suporte_id)))
         return suportes
 
     def add_meus_suportes(self):
-        return Suporte.objects.filter(autor=self.autor)#.exclude(id__in=self.get_suportes())
+        return list(set(list(Suporte.objects.filter(autor=self.autor))) - set(self.get_suportes()))
     
     def add_outros_suportes(self):
-        return Suporte.objects.all()#.exclude(id__in=self.add_meus_suportes()).exclude(id__in=self.get_suportes())
+        return list(set(list(Suporte.objects.exclude(autor=self.autor))) - set(self.get_suportes()))
 
 
 class AtividadeEditForm(ModelForm):
@@ -149,10 +149,10 @@ class Topico(models.Model):
         return atividades
 
     def add_minhas_atividades(self):
-        return Atividade.objects.filter(autor=self.autor)#.exclude(id__in=self.get_atividades())
+        return list(set(list(Atividade.objects.filter(autor=self.autor))) - set(self.get_atividades()))
     
-    def add_outros_atividades(self):
-        return Atividade.objects.all()#.exclude(id__in=self.add_minhas_atividades()).exclude(id__in=self.get_atividades())
+    def add_outras_atividades(self):
+        return list(set(list(Atividade.objects.exclude(autor=self.autor))) - set(self.get_atividades()))
 
     def get_suportes(self):
         tss = TopicoSuporte.objects.filter(topico_id = self.id).order_by('ordem')
@@ -162,10 +162,10 @@ class Topico(models.Model):
         return suportes
 
     def add_meus_suportes(self):
-        return Suporte.objects.filter(autor=self.autor)#.exclude(id__in=self.get_suportes())
+        return list(set(list(Suporte.objects.filter(autor=self.autor))) - set(self.get_suportes()))
     
     def add_outros_suportes(self):
-        return Suporte.objects.all()#.exclude(id__in=self.add_meus_suportes()).exclude(id__in=self.get_suportes())
+        return list(set(list(Suporte.objects.exclude(autor=self.autor))) - set(self.get_suportes()))
 
 
 class TopicoEditForm(ModelForm):

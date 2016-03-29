@@ -394,7 +394,9 @@ def suporte_list(request, template_name='mathema/suporte_list.html'):
     suporte_form = SuporteForm(request.POST or None, request.FILES or None)
     
     if suporte_form.is_valid():
-        suporte_form.save()
+        suporte = suporte_form.save(commit=False)
+        suporte.autor = request.user
+        suporte.save()
         return redirect('mathema:suporte_list')
     
     data = {}
